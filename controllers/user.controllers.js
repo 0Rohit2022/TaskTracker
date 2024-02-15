@@ -7,7 +7,9 @@ export const registerUser = async(req, res, next) => {
     try {
         const {name , email ,password} = req.body;
 
-        const existedUser = await User.findOne({email}).maxTimeMS(1500000); 
+        const existedUser = await User.findOne({
+            $or: [{name , email}]
+        }).maxTimeMS(1500000); 
 
         if (existedUser) {
           return next(new ErrorHandler("User already exist : ", 400));
