@@ -3,7 +3,7 @@ import { User } from "../models/user.models.js";
 import bcrypt from 'bcrypt';
 import { sendCookie } from "../utils/features.js";
 
-export const registerUser = async (req, res) => {
+export const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
