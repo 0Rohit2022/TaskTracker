@@ -7,9 +7,9 @@ export const registerUser = async(req, res, next) => {
     try {
         const {name , email ,password} = req.body;
 
-        const existedUser = await User.findOne({email});
+        let user = await User.findOne({email});
 
-        if(existedUser)
+        if(user)
         {
             return next(new ErrorHandler ("User already exist : ", 400));
         }
@@ -17,7 +17,7 @@ export const registerUser = async(req, res, next) => {
 
         const encryptedPassword = await bcrypt.hash(password, 10);
 
-        const user = await User.create({
+         user = await User.create({
           email,
           name,
           password: encryptedPassword,
