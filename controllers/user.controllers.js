@@ -7,17 +7,16 @@ export const registerUser = async(req, res, next) => {
     try {
         const {name , email ,password} = req.body;
 
-        let user = await User.findOne({email}).maxTimeMS(20000);
+        const existedUser = await User.findOne({email}).maxTimeMS(1500000); 
 
-        if(user)
-        {
-            return next(new ErrorHandler ("User already exist : ", 400));
+        if (existedUser) {
+          return next(new ErrorHandler("User already exist : ", 400));
         }
 
 
         const encryptedPassword = await bcrypt.hash(password, 10);
 
-         user = await User.create({
+        const user = await User.create({
           email,
           name,
           password: encryptedPassword,
