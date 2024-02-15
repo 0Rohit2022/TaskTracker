@@ -3,34 +3,23 @@ import { User } from "../models/user.models.js";
 import bcrypt from 'bcrypt';
 import { sendCookie } from "../utils/features.js";
 
-export const registerUser = async(req, res, next) => {
-    try {
-        const {name , email ,password} = req.body;
+export const registerUser = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
 
-        const existedUser = await User.findOne({
-            $or: [{name , email}]
-        }).maxTimeMS(1500000); 
+    let user = await User.findOne({ email });
 
-        if (existedUser) {
-          return next(new ErrorHandler("User already exist : ", 400));
-        }
+    if (user) return next(new ErrorHandler("User Already Exist", 400));
 
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        const encryptedPassword = await bcrypt.hash(password, 10);
+    user = await User.create({ name, email, password: hashedPassword });
 
-        const user = await User.create({
-          email,
-          name,
-          password: encryptedPassword,
-        });
-
-        sendCookie(user, res, "Registered SuccessFully", 201);
-
-
-    } catch (error) {
-        next(error);
-    }
-}
+    sendCookie(user, res, "Registered Successfully", 201);
+  } catch (error) {
+    next(error);
+  }
+};
 
 
 export const loginUser = async (req, res, next) => {
