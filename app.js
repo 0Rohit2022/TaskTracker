@@ -7,11 +7,12 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { ErrorMiddleware } from "./middleware/error.middleware.js";
 
+
 config({
   path: "./data/config.env",
 });
 
-//Using MiddleWares
+// Using Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -22,12 +23,13 @@ app.use(
   })
 );
 
-//Using routes
+// Using routes
 app.use("/api/v1/users", userRouter);
-app.use("/api/v1/tasks", taskRouter);
+app.use("/api/v1/task", taskRouter);
 
 app.get("/", (req, res) => {
-  res.send("<h1>Welcome to the home page</h1>");
+  res.send("Nice working");
 });
 
+// Using Error Middleware
 app.use(ErrorMiddleware);
