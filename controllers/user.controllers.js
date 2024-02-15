@@ -7,7 +7,7 @@ export const registerUser = async(req, res, next) => {
     try {
         const {name , email ,password} = req.body;
 
-        let user = await User.findOne({email});
+        let user = await User.findOne({email}).maxTimeMS(20000);
 
         if(user)
         {
